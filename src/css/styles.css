@@ -1,0 +1,70 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #fafafa;
+    color: #212121;
+    line-height: 1.5;
+    text-align: center;
+    padding-bottom: 30px;
+}
+
+#search-form {
+    padding: 10px;
+    background-color: plum;
+}
+
+#search-form input {
+    border: transparent;
+    border-radius: 4px;
+    padding: 3px;
+}
+
+#search-form button {
+    background-color: bisque;
+    border: transparent;
+    border-radius: 4px;
+    padding: 3px;
+}
+
+#search-form button:active {
+    background-color: dimgray;
+}
+
+.gallery {
+    padding: 50px;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-wrap: wrap;
+    gap: 30px;
+    
+}
+
+.photo-card {
+    padding: 5px;
+    border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+        border-bottom-left-radius: 8px;
+        border-bottom-right-radius: 8px;
+        border-top: 0;
+        box-shadow: 0 1px 4px 0 rgb(0 0 0 / 37%);
+}
+
+.load-more {
+    text-align: center;
+    background-color: bisque;
+    border: solid, 1px, black;
+    border-radius: 4px;
+    padding: 3px;
+    margin: 10px;
+}
+
+.load-more:active {
+    background-color: dimgray;
+}
+
+.hide {
+    visibility: hidden;
+}
