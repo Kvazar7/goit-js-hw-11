@@ -10,12 +10,14 @@ const loadMoretButton = new LOADMORE('.load-more');
 const gallery = document.querySelector('.gallery');
 const serch = new SERCH;
 
+let inputValue = "";
+
 requestButton.addEventListener("submit", onSubmit);
 loadMoretButton.button.addEventListener("click", onLoadMore);
 
 async function onSubmit(e) {
     e.preventDefault();
-    inputValue = "";
+    
     inputValue = input.value.trim();
     
     if (inputValue === '') {
