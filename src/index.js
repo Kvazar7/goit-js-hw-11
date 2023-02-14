@@ -1,43 +1,89 @@
-import './css/styles.css';
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
 import Notiflix from 'notiflix';
-import SERCH from './js/request.js'
+import LOADMORE from './js/loadmorebtn.js'
+import SERCH from './js/serch.js'
 
 const input = document.querySelector('#search-form input');
 const requestButton = document.querySelector('#search-form');
-const loadMoretButton = document.querySelector('.load-more');
+const loadMoretButton = new LOADMORE('.load-more');
 const gallery = document.querySelector('.gallery');
-const serch = new SERCH
+const serch = new SERCH;
 
 requestButton.addEventListener("submit", onSubmit);
+loadMoretButton.button.addEventListener("click", onLoadMore);
 
-function onSubmit(e) {
+async function onSubmit(e) {
     e.preventDefault();
-    const inputValue = input.value;
-    console.log(inputValue);
+    
+    inputValue = input.value.trim();
+    
+    if (inputValue === '') {
+      return ;
+    }
+
+    serch.resetQueryPage();
+
+    serch.responseToRequest(inputValue)
+        .then((data) => {
+            let images = data.hits;
+            let quantity = data.totalHits;
+            
+            if (quantity === 0) {
+                Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.");
+                loadMoretButton.hide();
+                return 
+            }
+
+            if (images.length < 40) {
+                Notiflix.Notify.warning("We're sorry, but you've reached the end of search results.");
+                loadMoretButton.hide();
+                return images.reduce((markup, image) =>
+                    creatMarkUp(image) + markup, "");
+            }
+
+            else {
+                Notiflix.Notify.success(`Hooray! We found ${quantity} images.`);
+                loadMoretButton.show();
+                return images.reduce((markup, image) =>
+                    creatMarkUp(image) + markup, "");
+            }
+        })
+        .then(updList);
+};
+   
+async function onLoadMore(e) {
+    // e.preventDefault();
+    // const inputValue = input.value;
+    
     serch.responseToRequest(inputValue)
         .then((data) => {
             const images = data.hits;
             const quantity = data.totalHits;
             
-            if (data.totalHits === 0) {
+            if (quantity === 0) {
                 Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.");
                 return 
             }
+
+            if (images.length < 40) {
+                Notiflix.Notify.warning("We're sorry, but you've reached the end of search results.");
+                loadMoretButton.hide();
+                return images.reduce((markup, image) =>
+                    creatMarkUp(image) + markup, "");
+            }
+
             else {
                 Notiflix.Notify.success(`Hooray! We found ${quantity} images.`);
                 console.log(images);
                 return images.reduce((markup, image) =>
                     creatMarkUp(image) + markup, "");
             }
-                
         })
         .then(updList);
-    }
+};
 
 function creatMarkUp(image) {
-    // console.log(image)
     return `<div class="photo-card">
             <a href="${image.webformatURL}">
             <img src="${image.largeImageURL}" alt="${image.tags}" loading="lazy" width="300" height="200"/>
@@ -57,13 +103,9 @@ function creatMarkUp(image) {
                 </p>
             </div>
             </div>`
-    
 };
 
 function updList(markup) {
-    gallery.innerHTML = "";
-    if (markup !== undefined)
-        gallery.innerHTML = markup;
-        new SimpleLightbox('.gallery a').refresh();;
-        loadMoretButton.classList.toggle('hide');
+    gallery.innerHTML = markup;
+    new SimpleLightbox('.gallery a').refresh();
 };

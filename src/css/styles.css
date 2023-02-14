@@ -65,6 +65,7 @@ body {
     background-color: dimgray;
 }
 
-.hide {
-    visibility: hidden;
+.hideBtn {
+    display: none;
+    /* visibility: hidden; */
 }
