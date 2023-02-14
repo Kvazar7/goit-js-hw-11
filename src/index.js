@@ -17,6 +17,9 @@ loadMoretButton.button.addEventListener("click", onLoadMore);
 
 async function onSubmit(e) {
     e.preventDefault();
+    serch.resetQueryPage();
+    loadMoretButton.hide();
+    clearHtml();
     
     inputValue = input.value.trim();
     
@@ -24,9 +27,7 @@ async function onSubmit(e) {
       return ;
     }
 
-    serch.resetQueryPage();
-
-    serch.responseToRequest(inputValue)
+    await serch.responseToRequest(inputValue)
         .then((data) => {
             let images = data.hits;
             let quantity = data.totalHits;
@@ -55,10 +56,8 @@ async function onSubmit(e) {
 };
    
 async function onLoadMore(e) {
-    // e.preventDefault();
-    // const inputValue = input.value;
-    
-    serch.responseToRequest(inputValue)
+
+    await serch.responseToRequest(inputValue)
         .then((data) => {
             const images = data.hits;
             const quantity = data.totalHits;
@@ -77,7 +76,6 @@ async function onLoadMore(e) {
 
             else {
                 Notiflix.Notify.success(`Hooray! We found ${quantity} images.`);
-                console.log(images);
                 return images.reduce((markup, image) =>
                     creatMarkUp(image) + markup, "");
             }
@@ -108,6 +106,10 @@ function creatMarkUp(image) {
 };
 
 function updList(markup) {
-    gallery.innerHTML = markup;
+    gallery.innerHTML += markup;
     new SimpleLightbox('.gallery a').refresh();
 };
+
+function clearHtml() {
+  gallery.innerHTML = '';
+}
