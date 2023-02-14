@@ -15,7 +15,7 @@ loadMoretButton.button.addEventListener("click", onLoadMore);
 
 async function onSubmit(e) {
     e.preventDefault();
-    
+    inputValue = "";
     inputValue = input.value.trim();
     
     if (inputValue === '') {
