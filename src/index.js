@@ -106,6 +106,7 @@ function creatMarkUp(image) {
 };
 
 function updList(markup) {
+    if (markup !== undefined)
     gallery.innerHTML += markup;
     new SimpleLightbox('.gallery a').refresh();
 };
